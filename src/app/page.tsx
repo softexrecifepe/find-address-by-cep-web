@@ -40,12 +40,6 @@ export default function Home() {
         <span>teste</span>
         <span>teste</span>
       </Card>
-
-      <header>
-        <nav>
-          <a>Link 1</a>
-        </nav>
-      </header>
     </div>
   );
 }
