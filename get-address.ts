@@ -1,9 +1,8 @@
 async function getAddress(cep: string) {
-  const url = `https://viacep.com.br/ws/${cep}/json/`;
+  const url = `https://viacep.com./ws/${cep}/json/`;
 
   try {
     const response = await fetch(url);
-
     const data = await response.json();
     console.log(data);
   } catch (error) {
@@ -11,5 +10,4 @@ async function getAddress(cep: string) {
   }
 }
 
-getAddress("5533fdsfsd0");
-console.log("Restante do código...");
+getAddress("55330000");
