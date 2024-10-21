@@ -1,3 +1,3 @@
-export default function SignIn() {
-  return <h1>Página SignIn</h1>;
+export default function Register() {
+  return <h1>Página Sign-In</h1>;
 }
