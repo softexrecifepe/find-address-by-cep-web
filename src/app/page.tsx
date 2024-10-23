@@ -7,13 +7,13 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   async function handleGetAddress() {
-    setAddress(null);
     setLoading(true);
 
     try {
-      const result = await getAddress("53080195");
-
+      const result = await getAddress("52051000");
       setAddress(result.logradouro);
+      // address = result;
+
       console.log(result.logradouro);
     } catch (error) {
       console.log(error);
@@ -33,7 +33,7 @@ export default function Home() {
           onClick={handleGetAddress}
           className={`${
             loading && "opacity-30"
-          } px-5 w-fit py-3 bg-blue-700 text-white rounded-xl`}
+          } w-fit px-5 py-3 bg-blue-700 text-white rounded-xl`}
         >
           {loading ? "Carregando..." : "Obter endereço"}
         </button>
