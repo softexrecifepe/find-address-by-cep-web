@@ -1,32 +1,43 @@
 "use client";
-
+import { useState } from "react";
 import { getAddress } from "../../get-address";
 
 export default function Home() {
-  let address = "Rua Teste";
+  const [address, setAddress] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   async function handleGetAddress() {
-    try {
-      const result = await getAddress("55330000");
-      address = result;
+    setAddress(null);
+    setLoading(true);
 
-      console.log(result);
+    try {
+      const result = await getAddress("53080195");
+
+      setAddress(result.logradouro);
+      console.log(result.logradouro);
     } catch (error) {
       console.log(error);
       alert("Ocorreu um erro ao obter o endereço.");
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <div>
       <h1>Página Home</h1>
-      <span>Endereço: {address}</span>
-      <button
-        onClick={handleGetAddress}
-        className="px-5 py-3 bg-blue-700 text-white rounded-xl"
-      >
-        Obter endereço
-      </button>
+
+      <div className="flex flex-col gap-2">
+        <span>Endereço: {address}</span>
+        <button
+          onClick={handleGetAddress}
+          className={`${
+            loading && "opacity-30"
+          } px-5 w-fit py-3 bg-blue-700 text-white rounded-xl`}
+        >
+          {loading ? "Carregando..." : "Obter endereço"}
+        </button>
+      </div>
     </div>
   );
 }
