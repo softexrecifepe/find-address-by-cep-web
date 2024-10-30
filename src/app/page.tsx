@@ -10,7 +10,7 @@ const names = [
   "Camilinha Barros",
 ];
 
-const enderecos = [
+const inititalEnderecos = [
   {
     id: self.crypto.randomUUID(),
     cep: "51270380",
@@ -93,9 +93,29 @@ const enderecos = [
   },
 ];
 
+type Address = {
+  id: string;
+  cep: string;
+  logradouro: string;
+  complemento: string;
+  unidade: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
+  estado: string;
+  regiao: string;
+  ibge: string;
+  gia: string;
+  ddd: string;
+  siafi: string;
+};
+
 export default function Home() {
   const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [enderecos, setEnderecos] = useState<Address[]>(inititalEnderecos);
+
   const [inputValue, setInputValue] = useState("");
 
   async function handleGetAddress() {
@@ -110,6 +130,9 @@ export default function Home() {
       const result = await getAddress(inputValue);
       setAddress(result.logradouro);
       // address = result;
+
+      // const newEnderecos = [...enderecos, result];
+      setEnderecos([...enderecos, result]);
 
       console.log(result);
     } catch (error) {
