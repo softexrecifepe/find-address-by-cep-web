@@ -3,7 +3,7 @@ import Link from "next/link";
 export function Header() {
   return (
     <header className="border-b border-black py-5">
-      <nav>
+      <nav className="hidden md:block">
         <ul className="flex justify-center gap-4">
           <li>
             <Link href="/">Página Home</Link>
@@ -16,6 +16,10 @@ export function Header() {
           </li>
         </ul>
       </nav>
+
+      <div id="button-menu" className="md:hidden">
+        menu
+      </div>
     </header>
   );
 }
