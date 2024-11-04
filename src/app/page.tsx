@@ -1,16 +1,10 @@
 "use client";
 import { useState } from "react";
 import { getAddress } from "../../get-address";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-const names = [
-  "Arthur de Oliveira",
-  "Lucas Galvão",
-  "Izabelle Alves",
-  "Gabryella Silva",
-  "Camilinha Barros",
-];
-
-const inititalEnderecos = [
+const inititalEnderecos: Address[] = [
   {
     id: self.crypto.randomUUID(),
     cep: "51270380",
@@ -26,6 +20,7 @@ const inititalEnderecos = [
     gia: "",
     ddd: "81",
     siafi: "2619",
+    createdAt: new Date(),
   },
   {
     id: self.crypto.randomUUID(),
@@ -42,6 +37,7 @@ const inititalEnderecos = [
     gia: "",
     ddd: "31",
     siafi: "4123",
+    createdAt: new Date(),
   },
   {
     id: self.crypto.randomUUID(),
@@ -58,6 +54,7 @@ const inititalEnderecos = [
     gia: "1004",
     ddd: "11",
     siafi: "7107",
+    createdAt: new Date(),
   },
   {
     id: self.crypto.randomUUID(),
@@ -74,6 +71,7 @@ const inititalEnderecos = [
     gia: "",
     ddd: "71",
     siafi: "3849",
+    createdAt: new Date(),
   },
   {
     id: self.crypto.randomUUID(),
@@ -90,6 +88,7 @@ const inititalEnderecos = [
     gia: "",
     ddd: "61",
     siafi: "9701",
+    createdAt: new Date(),
   },
 ];
 
@@ -108,7 +107,17 @@ type Address = {
   gia: string;
   ddd: string;
   siafi: string;
+  createdAt: Date;
 };
+
+function formatDate(date: Date) {
+  const result = formatDistanceToNow(new Date(date), {
+    includeSeconds: true,
+    locale: ptBR,
+  });
+
+  return result;
+}
 
 export default function Home() {
   const [address, setAddress] = useState(null);
@@ -132,9 +141,15 @@ export default function Home() {
       // address = result;
 
       // const newEnderecos = [...enderecos, result];
-      setEnderecos([...enderecos, result]);
+      const newEndereco: Address = {
+        id: self.crypto.randomUUID(),
+        createdAt: new Date(),
+        ...result,
+      };
 
-      console.log(result);
+      console.log(newEndereco);
+
+      setEnderecos([newEndereco, ...enderecos]);
     } catch (error) {
       console.log(error);
       alert("Ocorreu um erro ao obter o endereço.");
@@ -176,7 +191,9 @@ export default function Home() {
 
       <ul>
         {enderecos.map((endereco) => (
-          <li key={endereco.id}>{endereco.logradouro}</li>
+          <li key={endereco.id}>
+            {endereco.logradouro}, {formatDate(endereco.createdAt)}
+          </li>
         ))}
       </ul>
     </div>
