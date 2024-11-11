@@ -3,6 +3,7 @@ import { useState } from "react";
 import { getAddress } from "../../get-address";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { MdDelete } from "react-icons/md";
 
 const inititalEnderecos: Address[] = [
   {
@@ -158,9 +159,18 @@ export default function Home() {
     }
   }
 
+  function handleDeleteAddress(id: string) {
+    console.log(id);
+    const filteredAddresses = enderecos.filter(
+      (endereco) => endereco.id !== id
+    );
+
+    setEnderecos(filteredAddresses);
+  }
+
   return (
-    <div className="flex flex-col gap-4 px-72 mt-24">
-      <div className="flex gap-2">
+    <div className="flex flex-col gap-4 px-56 mt-24">
+      <div className="flex px-64 gap-2">
         <input
           onChange={(event) => setInputValue(event.target.value)}
           placeholder="Digite o CEP aqui"
@@ -187,6 +197,7 @@ export default function Home() {
             <th>Estado</th>
             <th>CEP</th>
             <th>Consultado em</th>
+            <th>Ações</th>
           </tr>
         </thead>
 
@@ -199,6 +210,14 @@ export default function Home() {
               <td>{endereco.uf}</td>
               <td>{endereco.cep}</td>
               <td>{formatDate(endereco.createdAt)}</td>
+              <td className="flex">
+                <button
+                  onClick={() => handleDeleteAddress(endereco.id)}
+                  className="p-1"
+                >
+                  <MdDelete size={24} />
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
