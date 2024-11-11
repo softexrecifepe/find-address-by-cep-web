@@ -159,15 +159,12 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <h1>Página Home</h1>
-
-      <div className="flex flex-col gap-2">
-        <label>Endereço</label>
+    <div className="flex flex-col gap-4 px-72 mt-24">
+      <div className="flex gap-2">
         <input
           onChange={(event) => setInputValue(event.target.value)}
           placeholder="Digite o CEP aqui"
-          className="rounded-md border border-black px-4 p-3"
+          className="flex flex-1 rounded-md border border-black px-4 p-3"
         />
 
         <button
@@ -181,21 +178,31 @@ export default function Home() {
         </button>
       </div>
 
-      {/* <ul>
-        <li>Arthur de Oliveira</li>
-        <li>Lucas Galvão</li>
-        <li>Izabelle Alves</li>
-        <li>Gabryella Silva</li>
-        <li>Camilinha Barros</li>
-      </ul> */}
+      <table>
+        <thead>
+          <tr>
+            <th>Logradouro</th>
+            <th>Bairro</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>CEP</th>
+            <th>Consultado em</th>
+          </tr>
+        </thead>
 
-      <ul>
-        {enderecos.map((endereco) => (
-          <li key={endereco.id}>
-            {endereco.logradouro}, {formatDate(endereco.createdAt)}
-          </li>
-        ))}
-      </ul>
+        <tbody>
+          {enderecos.map((endereco) => (
+            <tr key={endereco.id} className="border-2 [&>*]:py-2 [&>*]:px-2">
+              <td>{endereco.logradouro}</td>
+              <td>{endereco.bairro}</td>
+              <td>{endereco.localidade}</td>
+              <td>{endereco.uf}</td>
+              <td>{endereco.cep}</td>
+              <td>{formatDate(endereco.createdAt)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
