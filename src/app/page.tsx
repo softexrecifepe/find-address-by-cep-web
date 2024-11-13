@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getAddress } from "../../get-address";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -124,7 +124,7 @@ export default function Home() {
   const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const [enderecos, setEnderecos] = useState<Address[]>(inititalEnderecos);
+  const [enderecos, setEnderecos] = useState<Address[] | null>(null);
 
   const [inputValue, setInputValue] = useState("");
 
@@ -150,7 +150,7 @@ export default function Home() {
 
       console.log(newEndereco);
 
-      setEnderecos([newEndereco, ...enderecos]);
+      setEnderecos([newEndereco].concat(enderecos ? enderecos : []));
     } catch (error) {
       console.log(error);
       alert("Ocorreu um erro ao obter o endereço.");
@@ -167,6 +167,20 @@ export default function Home() {
 
     setEnderecos(filteredAddresses);
   }
+
+  useEffect(() => {
+    const result = localStorage.getItem("@addresses");
+
+    if (result === null) return;
+
+    setEnderecos(JSON.parse(result));
+  }, []);
+
+  useEffect(() => {
+    if (enderecos === null) return;
+
+    localStorage.setItem("@addresses", JSON.stringify(enderecos));
+  }, [enderecos]);
 
   return (
     <div className="flex flex-col gap-4 px-56 mt-24">
@@ -202,7 +216,7 @@ export default function Home() {
         </thead>
 
         <tbody>
-          {enderecos.map((endereco) => (
+          {enderecos?.map((endereco) => (
             <tr key={endereco.id} className="border-2 [&>*]:py-2 [&>*]:px-2">
               <td>{endereco.logradouro}</td>
               <td>{endereco.bairro}</td>
