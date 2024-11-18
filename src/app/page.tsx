@@ -4,6 +4,7 @@ import { getAddress } from "../../get-address";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { MdDelete } from "react-icons/md";
+import { useSession } from "@/contexts/session-context";
 
 const inititalEnderecos: Address[] = [
   {
@@ -121,12 +122,24 @@ function formatDate(date: Date) {
 }
 
 export default function Home() {
+  const { session, setSession } = useSession();
+
   const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const [enderecos, setEnderecos] = useState<Address[] | null>(null);
 
   const [inputValue, setInputValue] = useState("");
+
+  function handleSignIn() {
+    // Requisição para a API de autenticação
+
+    setSession({
+      id: "1",
+      name: "Augusto",
+      role: "ADMIN",
+    });
+  }
 
   async function handleGetAddress() {
     if (inputValue.length !== 8) {
@@ -184,6 +197,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-4 px-56 mt-24">
+      <h1 className="text-2xl">{session?.name}</h1>
+
+      <button onClick={handleSignIn} className="bg-blue-400 p-4 w-fit">
+        SignIn
+      </button>
+
       <div className="flex px-64 gap-2">
         <input
           onChange={(event) => setInputValue(event.target.value)}
