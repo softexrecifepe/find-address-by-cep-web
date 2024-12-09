@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getAddress } from "../../get-address";
+import { getAddress } from "../services/get-address";
 
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
