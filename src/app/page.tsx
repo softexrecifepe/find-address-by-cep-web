@@ -1,98 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getAddress } from "../../get-address";
+
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { MdDelete } from "react-icons/md";
-import { useSession } from "@/contexts/session-context";
 
-const inititalEnderecos: Address[] = [
-  {
-    id: self.crypto.randomUUID(),
-    cep: "51270380",
-    logradouro: "Rua Engenho Carau",
-    complemento: "",
-    unidade: "1",
-    bairro: "Cohab",
-    localidade: "Recife",
-    uf: "PE",
-    estado: "Pernambuco",
-    regiao: "Nordeste",
-    ibge: "2611606",
-    gia: "",
-    ddd: "81",
-    siafi: "2619",
-    createdAt: new Date(),
-  },
-  {
-    id: self.crypto.randomUUID(),
-    cep: "30130010",
-    logradouro: "Avenida Afonso Pena",
-    complemento: "",
-    unidade: "2",
-    bairro: "Centro",
-    localidade: "Belo Horizonte",
-    uf: "MG",
-    estado: "Minas Gerais",
-    regiao: "Sudeste",
-    ibge: "3106200",
-    gia: "",
-    ddd: "31",
-    siafi: "4123",
-    createdAt: new Date(),
-  },
-  {
-    id: self.crypto.randomUUID(),
-    cep: "01310000",
-    logradouro: "Avenida Paulista",
-    complemento: "",
-    unidade: "3",
-    bairro: "Bela Vista",
-    localidade: "São Paulo",
-    uf: "SP",
-    estado: "São Paulo",
-    regiao: "Sudeste",
-    ibge: "3550308",
-    gia: "1004",
-    ddd: "11",
-    siafi: "7107",
-    createdAt: new Date(),
-  },
-  {
-    id: self.crypto.randomUUID(),
-    cep: "40020000",
-    logradouro: "Praça da Sé",
-    complemento: "Edifício Central",
-    unidade: "4",
-    bairro: "Centro Histórico",
-    localidade: "Salvador",
-    uf: "BA",
-    estado: "Bahia",
-    regiao: "Nordeste",
-    ibge: "2927408",
-    gia: "",
-    ddd: "71",
-    siafi: "3849",
-    createdAt: new Date(),
-  },
-  {
-    id: self.crypto.randomUUID(),
-    cep: "70040900",
-    logradouro: "Esplanada dos Ministérios",
-    complemento: "",
-    unidade: "5",
-    bairro: "Zona Cívico-Administrativa",
-    localidade: "Brasília",
-    uf: "DF",
-    estado: "Distrito Federal",
-    regiao: "Centro-Oeste",
-    ibge: "5300108",
-    gia: "",
-    ddd: "61",
-    siafi: "9701",
-    createdAt: new Date(),
-  },
-];
+import { MdDelete } from "react-icons/md";
 
 type Address = {
   id: string;
@@ -122,28 +35,14 @@ function formatDate(date: Date) {
 }
 
 export default function Home() {
-  const { session, setSession } = useSession();
-
-  const [address, setAddress] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const [enderecos, setEnderecos] = useState<Address[] | null>(null);
-
   const [inputValue, setInputValue] = useState("");
 
-  function handleSignIn() {
-    // Requisição para a API de autenticação
-
-    setSession({
-      id: "1",
-      name: "Augusto",
-      role: "ADMIN",
-    });
-  }
+  const [addresses, setAddresses] = useState<Address[] | null>(null);
+  const [loading, setLoading] = useState(false);
 
   async function handleGetAddress() {
-    if (inputValue.length !== 8) {
-      alert("CEP inválido");
+    if (inputValue.length < 8) {
+      alert("CEP inválido!");
       return;
     }
 
@@ -151,19 +50,14 @@ export default function Home() {
 
     try {
       const result = await getAddress(inputValue);
-      setAddress(result.logradouro);
-      // address = result;
 
-      // const newEnderecos = [...enderecos, result];
-      const newEndereco: Address = {
+      const newAddress: Address = {
         id: self.crypto.randomUUID(),
         createdAt: new Date(),
         ...result,
       };
 
-      console.log(newEndereco);
-
-      setEnderecos([newEndereco].concat(enderecos ? enderecos : []));
+      setAddresses([newAddress].concat(addresses ? addresses : []));
     } catch (error) {
       console.log(error);
       alert("Ocorreu um erro ao obter o endereço.");
@@ -173,12 +67,13 @@ export default function Home() {
   }
 
   function handleDeleteAddress(id: string) {
-    console.log(id);
-    const filteredAddresses = enderecos.filter(
+    if (addresses === null) return;
+
+    const filteredAddresses = addresses.filter(
       (endereco) => endereco.id !== id
     );
 
-    setEnderecos(filteredAddresses);
+    setAddresses(filteredAddresses);
   }
 
   useEffect(() => {
@@ -186,28 +81,22 @@ export default function Home() {
 
     if (result === null) return;
 
-    setEnderecos(JSON.parse(result));
+    setAddresses(JSON.parse(result));
   }, []);
 
   useEffect(() => {
-    if (enderecos === null) return;
+    if (addresses === null) return;
 
-    localStorage.setItem("@addresses", JSON.stringify(enderecos));
-  }, [enderecos]);
+    localStorage.setItem("@addresses", JSON.stringify(addresses));
+  }, [addresses]);
 
   return (
-    <div className="flex flex-col gap-4 px-56 mt-24">
-      <h1 className="text-2xl">{session?.name}</h1>
-
-      <button onClick={handleSignIn} className="bg-blue-400 p-4 w-fit">
-        SignIn
-      </button>
-
+    <div className="flex flex-col gap-6 px-56 mt-20">
       <div className="flex px-64 gap-2">
         <input
           onChange={(event) => setInputValue(event.target.value)}
           placeholder="Digite o CEP aqui"
-          className="flex flex-1 rounded-md border border-black px-4 p-3"
+          className="flex flex-1 rounded-md border border-black px-4 py-2"
         />
 
         <button
@@ -215,13 +104,13 @@ export default function Home() {
           onClick={handleGetAddress}
           className={`${
             loading && "opacity-30"
-          } w-fit px-5 py-3 bg-blue-700 text-white rounded-xl`}
+          } w-fit px-5 py-2 bg-blue-700 text-white rounded-xl`}
         >
           {loading ? "Carregando..." : "Obter endereço"}
         </button>
       </div>
 
-      <table>
+      <table className="[&>*>*]:border [&>*>*]:border-black [&>*>*]:h-[35px] [&>*>*]:text-center">
         <thead>
           <tr>
             <th>Logradouro</th>
@@ -234,9 +123,9 @@ export default function Home() {
           </tr>
         </thead>
 
-        <tbody>
-          {enderecos?.map((endereco) => (
-            <tr key={endereco.id} className="border-2 [&>*]:py-2 [&>*]:px-2">
+        <tbody className="">
+          {addresses?.map((endereco) => (
+            <tr key={endereco.id}>
               <td>{endereco.logradouro}</td>
               <td>{endereco.bairro}</td>
               <td>{endereco.localidade}</td>
@@ -245,6 +134,7 @@ export default function Home() {
               <td>{formatDate(endereco.createdAt)}</td>
               <td className="flex">
                 <button
+                  title="Excluir endereço"
                   onClick={() => handleDeleteAddress(endereco.id)}
                   className="p-1"
                 >
