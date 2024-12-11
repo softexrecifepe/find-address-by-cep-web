@@ -91,7 +91,9 @@ export default function Home() {
   }, [addresses]);
 
   return (
-    <div className="flex flex-col gap-6 px-56 mt-20">
+    <div className="flex flex-col gap-6 px-56 mt-8">
+      <h1 className="text-2xl font-semibold">Encontre seu endereço pelo CEP</h1>
+
       <div className="flex px-64 gap-2">
         <input
           onChange={(event) => setInputValue(event.target.value)}
