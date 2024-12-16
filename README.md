@@ -2,7 +2,7 @@
 
 Este é um projeto que permite aos usuários encontrar um endereço a partir de um CEP. Ele foi desenvolvido com **Next.js** e **TypeScript**, com o objetivo de aprimorar as seguintes habilidades:
 
-- Realizar requisições HTTP assíncronas utilizando a [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+- Realizar requisições HTTP assíncronas utilizando a [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API);
 - Armazenar e recuperar de dados do `localStorage`; e
 - Gerenciar o ciclo de vida dos efeitos React.
 
